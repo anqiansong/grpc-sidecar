@@ -4,7 +4,9 @@ package cp;
 
 option go_package = "github.com/anqiansong/grpc-sidecar/proxy";
 
-message CPRequest{}
+message CPRequest{
+  bytes in = 1;
+}
 message CPResponse{}
 
 service CPService{

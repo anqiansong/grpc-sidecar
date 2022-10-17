@@ -3,10 +3,11 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
+	"time"
 
 	"github.com/anqiansong/grpc-sidecar/example/pb"
 	"github.com/zeromicro/go-zero/core/discov"
+	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/zrpc"
 )
 
@@ -19,11 +20,15 @@ func main() {
 	})
 	c := pb.NewExampleServiceClient(client.Conn())
 	ctx := context.Background()
-	resp, err := c.Echo(ctx, &pb.ExampleReq{
-		In: "hello world",
-	})
-	if err != nil {
-		log.Fatalln(err)
+	for {
+		time.Sleep(5 * time.Second)
+		resp, err := c.Echo(ctx, &pb.ExampleReq{
+			In: fmt.Sprintf("hello from %v", time.Now().Format("2006-01-02 15:04:05")),
+		})
+		if err != nil {
+			logx.Error(err)
+			continue
+		}
+		fmt.Println(resp.Out)
 	}
-	fmt.Println(resp.Out)
 }

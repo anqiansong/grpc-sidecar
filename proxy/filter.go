@@ -7,5 +7,5 @@ import (
 )
 
 type Filter interface {
-	Do(ctx context.Context, conn *zrpc.RpcClient, fullMethodName string) error
+	Do(ctx context.Context, conn *zrpc.RpcClient, fullMethodName string, config *Config) error
 }

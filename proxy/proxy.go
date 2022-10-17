@@ -22,6 +22,8 @@ type Proxy struct {
 	filters       []Filter
 	once          sync.Once
 	ch            *ConfigHandler
+	conf          *Config
+	lock          sync.Mutex
 }
 
 func NewProxy(ch *ConfigHandler, filters ...Filter) *Proxy {
@@ -30,6 +32,14 @@ func NewProxy(ch *ConfigHandler, filters ...Filter) *Proxy {
 		ch:      ch,
 	}
 	return p
+}
+
+func (p *Proxy) SyncConfig() {
+	p.ch.Listen(func(conf *Config) {
+		p.lock.Lock()
+		p.conf = conf
+		p.lock.Unlock()
+	})
 }
 
 func (p *Proxy) Run(server Server) {
@@ -91,7 +101,7 @@ func (p *Proxy) director(ctx context.Context, fullMethodName string) (context.Co
 	}
 
 	for _, f := range p.filters {
-		err = f.Do(ctx, conn, fullMethodName)
+		err = f.Do(ctx, conn, fullMethodName, p.conf)
 		if err != nil {
 			return ctx, conn.Conn(), err
 		}

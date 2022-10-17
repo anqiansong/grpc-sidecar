@@ -45,8 +45,11 @@ func ListenSrv(ch *ConfigHandler, filters ...Filter) error {
 	}
 	defer l.Close()
 
+	var p = NewProxy(ch, filters...)
+	go p.SyncConfig()
+
 	var rh = &reqHandler{
-		p: NewProxy(ch, filters...),
+		p: p,
 	}
 
 	http.HandleFunc(srvPattern, rh.handleRequest)

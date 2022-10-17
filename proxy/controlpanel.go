@@ -2,6 +2,7 @@ package proxy
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/zeromicro/go-zero/core/service"
 	"github.com/zeromicro/go-zero/zrpc"
@@ -41,11 +42,19 @@ func NewCPServer(ch *ConfigHandler) *cpServer {
 }
 
 func (c cpServer) SyncConfig(_ context.Context, request *CPRequest) (*CPResponse, error) {
-	var conf = configTransfer(request)
+	conf, err := configTransfer(request)
+	if err != nil {
+		return nil, err
+	}
+
 	c.ch.Put(conf)
 	return &CPResponse{}, nil
 }
 
-func configTransfer(request *CPRequest) Config {
-	return Config{}
+func configTransfer(request *CPRequest) (*Config, error) {
+	var conf Config
+	if err := json.Unmarshal(request.In, &conf); err != nil {
+		return nil, err
+	}
+	return &conf, nil
 }

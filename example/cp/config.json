@@ -1,0 +1,8 @@
+{
+  "interceptor": [
+    {
+      "method": "/example.ExampleService/Echo",
+      "enable": true
+    }
+  ]
+}

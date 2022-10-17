@@ -5,6 +5,7 @@ import (
 )
 
 type Config struct {
+	Interceptor []InterceptorConfig `json:"interceptor"`
 }
 
 type Server struct {
@@ -14,18 +15,18 @@ type Server struct {
 }
 
 type ConfigHandler struct {
-	ch   chan Config
+	ch   chan *Config
 	once sync.Once
 	wg   sync.WaitGroup
 }
 
 func NewConfigHandler() *ConfigHandler {
 	return &ConfigHandler{
-		ch: make(chan Config),
+		ch: make(chan *Config),
 	}
 }
 
-func (ch *ConfigHandler) Put(conf Config) {
+func (ch *ConfigHandler) Put(conf *Config) {
 	ch.ch <- conf
 }
 
@@ -40,7 +41,7 @@ func (ch *ConfigHandler) Wait() {
 	ch.wg.Wait()
 }
 
-func (ch *ConfigHandler) Listen(fn func(conf Config)) {
+func (ch *ConfigHandler) Listen(fn func(conf *Config)) {
 	for {
 		select {
 		case conf, ok := <-ch.ch:
