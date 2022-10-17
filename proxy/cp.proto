@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package cp;
+
+option go_package = "github.com/anqiansong/grpc-sidecar/proxy";
+
+message CPRequest{}
+message CPResponse{}
+
+service CPService{
+  rpc SyncConfig(CPRequest) returns (CPResponse);
+}
