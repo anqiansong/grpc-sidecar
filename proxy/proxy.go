@@ -22,7 +22,7 @@ type Proxy struct {
 	filters       []Filter
 	once          sync.Once
 	ch            *ConfigHandler
-	conf          *Config
+	conf          Config
 	lock          sync.Mutex
 }
 
@@ -35,7 +35,7 @@ func NewProxy(ch *ConfigHandler, filters ...Filter) *Proxy {
 }
 
 func (p *Proxy) SyncConfig() {
-	p.ch.Listen(func(conf *Config) {
+	p.ch.Listen(func(conf Config) {
 		p.lock.Lock()
 		p.conf = conf
 		p.lock.Unlock()

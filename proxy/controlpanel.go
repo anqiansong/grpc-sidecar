@@ -51,10 +51,10 @@ func (c cpServer) SyncConfig(_ context.Context, request *CPRequest) (*CPResponse
 	return &CPResponse{}, nil
 }
 
-func configTransfer(request *CPRequest) (*Config, error) {
+func configTransfer(request *CPRequest) (Config, error) {
 	var conf Config
 	if err := json.Unmarshal(request.In, &conf); err != nil {
-		return nil, err
+		return Config{}, err
 	}
-	return &conf, nil
+	return conf, nil
 }

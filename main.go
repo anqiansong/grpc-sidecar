@@ -19,7 +19,11 @@ func main() {
 	ch.Wait()
 
 	fmt.Println("started sidecar ...")
-	if err := proxy.ListenSrv(ch, proxy.Interceptor{}); err != nil {
+	if err := proxy.ListenSrv(ch,
+		proxy.NewLimiter(),
+		proxy.NewInterceptor(),
+		proxy.NewAuth(),
+	); err != nil {
 		log.Fatalln(err)
 	}
 }
