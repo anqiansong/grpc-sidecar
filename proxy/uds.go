@@ -34,7 +34,7 @@ func RegisterSrv(server Server) error {
 	return nil
 }
 
-func ListenSrv(ch *ConfigHandler, filters ...Filter) error {
+func ListenSrv(p *Proxy) error {
 	if err := os.RemoveAll(socketAddress); err != nil {
 		return err
 	}
@@ -45,7 +45,6 @@ func ListenSrv(ch *ConfigHandler, filters ...Filter) error {
 	}
 	defer l.Close()
 
-	var p = NewProxy(ch, filters...)
 	go p.SyncConfig()
 
 	var rh = &reqHandler{
@@ -76,7 +75,7 @@ func (rh *reqHandler) handleRequest(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 
-	go rh.p.Run(req)
+	rh.p.RunServerProxy(req)
 
 	w.WriteHeader(http.StatusOK)
 }
