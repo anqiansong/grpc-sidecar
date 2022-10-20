@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	//go listenProxy()
+	go listenProxy()
 	listenServer()
 }
 
