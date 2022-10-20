@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package example;
+
+option go_package = "github.com/anqiansong/grpc-sidecar/grpc-proxy/pb";
+
+message Req{
+  string in = 1;
+}
+
+message Resp{
+  string out = 1;
+}
+
+service GreetService{
+  rpc Echo(Req) returns (Resp);
+}
