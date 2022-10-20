@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net"
 	"time"
@@ -9,6 +10,7 @@ import (
 	"github.com/anqiansong/grpc-sidecar/example/grpc-proxy/pb"
 	"github.com/mwitkow/grpc-proxy/proxy"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
 )
 
@@ -19,7 +21,8 @@ func main() {
 
 func listenProxy() {
 	th := proxy.TransparentHandler(func(ctx context.Context, fullMethodName string) (context.Context, *grpc.ClientConn, error) {
-		conn, err := grpc.Dial("127.0.0.1:9001")
+		fmt.Println("-----")
+		conn, err := grpc.Dial("127.0.0.1:9000", grpc.WithTransportCredentials(insecure.NewCredentials()))
 		if err != nil {
 			return nil, nil, err
 		}
@@ -42,7 +45,7 @@ func listenProxy() {
 }
 
 func listenServer() {
-	l, err := net.Listen("tcp", ":9001")
+	l, err := net.Listen("tcp", ":9000")
 	if err != nil {
 		log.Fatalln(err)
 	}
