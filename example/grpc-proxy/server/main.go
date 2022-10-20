@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	go listenProxy()
+	//go listenProxy()
 	listenServer()
 }
 
@@ -61,5 +61,6 @@ type Greet struct {
 }
 
 func (g *Greet) Echo(ctx context.Context, req *pb.Req) (*pb.Resp, error) {
+	fmt.Println("grpc server")
 	return &pb.Resp{Out: req.In}, nil
 }
