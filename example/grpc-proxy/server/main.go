@@ -22,7 +22,7 @@ func main() {
 func listenProxy() {
 	th := proxy.TransparentHandler(func(ctx context.Context, fullMethodName string) (context.Context, *grpc.ClientConn, error) {
 		fmt.Println("-----")
-		conn, err := grpc.Dial("127.0.0.1:9000", grpc.WithTransportCredentials(insecure.NewCredentials()))
+		conn, err := grpc.Dial("127.0.0.1:9001", grpc.WithTransportCredentials(insecure.NewCredentials()))
 		if err != nil {
 			return nil, nil, err
 		}
@@ -45,7 +45,7 @@ func listenProxy() {
 }
 
 func listenServer() {
-	l, err := net.Listen("tcp", ":9000")
+	l, err := net.Listen("tcp", ":9001")
 	if err != nil {
 		log.Fatalln(err)
 	}
