@@ -31,7 +31,9 @@ func main() {
 
 	client := pb.NewGreetServiceClient(conn)
 	ctx := context.Background()
-	resp, err := client.Echo(ctx, &pb.Req{})
+	resp, err := client.Echo(ctx, &pb.Req{
+		In: "hello",
+	})
 	if err != nil {
 		log.Fatalln(err)
 	}
