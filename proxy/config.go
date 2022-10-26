@@ -5,8 +5,14 @@ import (
 )
 
 type Config struct {
-	Interceptor []Route    `json:"interceptor"`
-	AuthConfig  AuthConfig `json:"authConfig"`
+	Interceptor []Route     `json:"interceptor"`
+	AuthConfig  AuthConfig  `json:"authConfig"`
+	Limiter     LimitConfig `json:"limiter"`
+}
+
+type LimitConfig struct {
+	Enable bool `json:"enable"`
+	Qps    int  `json:"qps"`
 }
 
 type Server struct {

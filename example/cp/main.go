@@ -21,7 +21,7 @@ func main() {
 	}
 
 	c := zrpc.MustNewClient(zrpc.RpcClientConf{
-		Target: "127.0.0.1:9999",
+		Target: "127.0.0.1:9010",
 	})
 	client := proxy.NewCPServiceClient(c.Conn())
 	_, err = client.SyncConfig(context.Background(), &proxy.CPRequest{

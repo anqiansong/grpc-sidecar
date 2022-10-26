@@ -22,7 +22,16 @@ func NewLimiter() *Limiter {
 }
 
 func (l Limiter) Do(ctx context.Context, conn *zrpc.RpcClient, fullMethodName string, config Config) error {
-	limiter := limit.NewPeriodLimit(1, 5, l.r, "")
+	if !config.Limiter.Enable {
+		return nil
+	}
+
+	quota := config.Limiter.Qps
+	if quota <= 0 {
+		quota = 5
+	}
+
+	limiter := limit.NewPeriodLimit(1, quota, l.r, "")
 	val, err := limiter.Take(fullMethodName)
 	if err != nil {
 		return err

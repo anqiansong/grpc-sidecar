@@ -5,13 +5,11 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"time"
 
 	"github.com/anqiansong/grpc-sidecar/example/grpc-proxy/pb"
 	"github.com/mwitkow/grpc-proxy/proxy"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"google.golang.org/grpc/metadata"
 )
 
 func main() {
@@ -27,10 +25,7 @@ func listenProxy() {
 			return nil, nil, err
 		}
 
-		newCtx := metadata.NewOutgoingContext(ctx, metadata.New(map[string]string{
-			"grpc-proxy-date": time.Now().Format("2006-01-02 15:04:05"),
-		}))
-		return newCtx, conn, nil
+		return ctx, conn, nil
 	})
 
 	serviceHandlerOption := grpc.UnknownServiceHandler(th)

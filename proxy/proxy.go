@@ -132,7 +132,6 @@ func (p *Proxy) clientDirector(ctx context.Context, fullMethodName string) (cont
 }
 
 func (p *Proxy) serverDirector(ctx context.Context, fullMethodName string) (context.Context, *grpc.ClientConn, error) {
-	fmt.Println("[serverDirector]")
 	v := p.clientManager.Get()
 	err, ok := v.(error)
 	if ok {

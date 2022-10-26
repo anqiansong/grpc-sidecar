@@ -6,12 +6,16 @@
     }
   ],
   "authConfig": {
-    "enable": true,
+    "enable": false,
     "route": [
       {
         "method": "/example.ExampleService/Echo",
         "enable": true
       }
     ]
+  },
+  "limiter": {
+    "enable": true,
+    "qps": 20
   }
 }

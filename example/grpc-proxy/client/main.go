@@ -12,31 +12,31 @@ import (
 )
 
 func main() {
-	conn, err := grpc.Dial("127.0.0.1:9001",
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithChainUnaryInterceptor(func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
-			md, _ := metadata.FromOutgoingContext(ctx)
-			if len(md) != 0 {
-				values := md.Get("grpc-proxy-date")
-				if len(values) > 0 {
-					fmt.Println("grpc-proxy-date:", values[0])
-				}
-			}
-
-			return invoker(ctx, method, req, reply, cc, opts...)
-		}))
+	conn, err := grpc.Dial("10.211.55.4:8000",
+		grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalln(err)
 	}
 
 	client := pb.NewGreetServiceClient(conn)
 	ctx := context.Background()
+	var header, trailer metadata.MD
 	resp, err := client.Echo(ctx, &pb.Req{
 		In: "hello",
-	})
+	}, grpc.Header(&header), grpc.Trailer(&trailer))
 	if err != nil {
 		log.Fatalln(err)
 	}
 
+	if header != nil {
+		for k, v := range header {
+			fmt.Println(k, v)
+		}
+	}
+	if trailer != nil {
+		for k, v := range trailer {
+			fmt.Println(k, v)
+		}
+	}
 	fmt.Println(resp.Out)
 }
